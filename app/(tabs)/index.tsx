@@ -10,9 +10,9 @@ export default function Home() {
     <>
       <SafeAreaView edges={['top']} style={{ flex: 1, paddingHorizontal: 18 }}>
         <View style={styles.container}>
+          <SketchCanvas containerStyle={{ flex: 1 }} />
           <SaveErase />
           <UndoRedo />
-          <SketchCanvas containerStyle={{ flex: 1 }} />
         </View>
       </SafeAreaView>
     </>
