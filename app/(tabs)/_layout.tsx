@@ -1,7 +1,11 @@
-import { Link, Tabs } from 'expo-router';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { Tabs } from 'expo-router';
 
-import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
+import CustomBottomNavigation from '~/modules/navigation/custom-bottom-nav';
+
+const CustomBottomTabs = (props: BottomTabBarProps) => {
+  return <CustomBottomNavigation {...props} />;
+};
 
 export default function TabLayout() {
   return (
@@ -9,26 +13,8 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: 'black',
         headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Canvas',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="saved"
-        options={{
-          title: 'Saved Sketches',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
+      }}
+      tabBar={CustomBottomTabs}
+    />
   );
 }
