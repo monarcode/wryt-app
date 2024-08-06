@@ -8,11 +8,12 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: 'black',
+        headerShown: false,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Canvas',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -22,9 +23,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="saved"
         options={{
-          title: 'Tab Two',
+          title: 'Saved Sketches',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
