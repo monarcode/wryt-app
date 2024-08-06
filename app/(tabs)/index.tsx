@@ -1,15 +1,16 @@
-import { Stack } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ScreenContent } from '~/components/ScreenContent';
+import { Text } from '~/components/shared';
 
 export default function Home() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Tab One' }} />
-      <View style={styles.container}>
-        <ScreenContent path="app/(tabs)/index.tsx" title="Tab One" />
-      </View>
+      <SafeAreaView edges={['top']} style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <Text>Home</Text>
+        </View>
+      </SafeAreaView>
     </>
   );
 }
@@ -17,6 +18,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    paddingHorizontal: 24,
   },
 });
