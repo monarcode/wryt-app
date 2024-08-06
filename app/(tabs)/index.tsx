@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { SketchCanvas } from '~/components/SketchCanvas';
 import { Text } from '~/components/shared';
 
 export default function Home() {
@@ -8,7 +9,7 @@ export default function Home() {
     <>
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Text>Home</Text>
+          <SketchCanvas containerStyle={{ flex: 1 }} />
         </View>
       </SafeAreaView>
     </>
