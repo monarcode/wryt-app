@@ -25,7 +25,10 @@ const StrokePicker = () => {
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
           <PopoverPrimitive.Content side="top" sideOffset={10}>
-            <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={styles.popover}>
+            <Animated.View
+              entering={FadeInDown.duration(200)}
+              exiting={FadeOutDown.duration(200)}
+              style={styles.popover}>
               <Pressable style={styles.stroke}>
                 <StrokeFour />
               </Pressable>
