@@ -19,12 +19,12 @@
     "noInstall": false,
     "overwrite": false,
     "importAlias": true,
-    "packageManager": "pnpm",
+    "packageManager": "yarn",
     "eas": false
   },
   "packageManager": {
-    "type": "pnpm",
-    "version": "9.3.0"
+    "type": "yarn",
+    "version": "1.22.22"
   },
   "os": {
     "type": "Darwin",
