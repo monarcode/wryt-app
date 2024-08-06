@@ -20,6 +20,7 @@
     "@rn-primitives/popover": "^1.0.3",
     "@rn-primitives/portal": "^1.0.3",
     "@rn-primitives/utils": "^1.0.3",
+    "@shopify/react-native-skia": "1.2.3",
     "expo": "^51.0.24",
     "expo-constants": "~16.0.1",
     "expo-linking": "~6.3.1",
