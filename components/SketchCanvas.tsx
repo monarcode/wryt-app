@@ -2,42 +2,36 @@ import { Canvas, Path, TouchInfo, useTouchHandler, Skia, SkPath } from '@shopify
 import React, { useState } from 'react';
 
 export const SketchCanvas = ({ containerStyle }: { containerStyle: any }) => {
-  const [currentPath, setCurrentPath] = useState<SkPath | null>(null);
-  const [completedPaths, setCompletedPaths] = useState<SkPath[]>([]);
+  const [paths, setPaths] = useState<SkPath[]>([]);
 
   const strokeWidth = 4;
 
   const touchHandler = useTouchHandler({
     onStart: (touchInfo: TouchInfo) => {
-      const path = Skia.Path.Make();
-      path.moveTo(touchInfo.x, touchInfo.y);
-      setCurrentPath(path);
+      const newPath = Skia.Path.Make();
+      newPath.moveTo(touchInfo.x, touchInfo.y);
+      setPaths((currentPaths) => [...currentPaths, newPath]);
     },
     onActive: (touchInfo: TouchInfo) => {
-      setCurrentPath((prevPath) => {
-        const newPath = prevPath ? prevPath : null;
-        if (newPath) {
-          newPath.lineTo(touchInfo.x, touchInfo.y);
+      setPaths((currentPaths) => {
+        const lastIndex = currentPaths.length - 1;
+        const lastPath = currentPaths[lastIndex];
+        if (lastPath) {
+          const updatedPath = lastPath.copy();
+          updatedPath.lineTo(touchInfo.x, touchInfo.y);
+          return [...currentPaths.slice(0, lastIndex), updatedPath];
         }
-        return newPath;
+        return currentPaths;
       });
     },
-    onEnd: () => {
-      if (currentPath) {
-        setCompletedPaths((prevPaths) => [...prevPaths, currentPath]);
-        setCurrentPath(null);
-      }
-    },
+    onEnd: () => {},
   });
 
   return (
     <Canvas onTouch={touchHandler} style={containerStyle}>
-      {completedPaths.map((path, index) => (
+      {paths.map((path, index) => (
         <Path key={index} path={path} strokeWidth={strokeWidth} color="black" style="stroke" />
       ))}
-      {currentPath && (
-        <Path path={currentPath} strokeWidth={strokeWidth} color="black" style="stroke" />
-      )}
     </Canvas>
   );
 };
