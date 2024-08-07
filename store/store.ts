@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Skia } from '@shopify/react-native-skia';
-import create from 'zustand';
+import { create } from 'zustand';
 
 import { StoreType, PathType } from '~/types/store';
 
@@ -13,6 +13,7 @@ const useSketchPadStore = create<StoreType>((set, get) => ({
   currentPath: null,
   fileName: '',
   timeStamp: '',
+  refreshTrigger: 0,
 
   setColor: (color) => set({ color }),
   setStrokeWidth: (strokeWidth) => set({ strokeWidth }),
@@ -85,11 +86,13 @@ const useSketchPadStore = create<StoreType>((set, get) => ({
         }))
       );
       const timeStamp = new Date().toISOString();
+      const key = `@sketchpad_drawing_${timeStamp}`;
       await AsyncStorage.setItem(
-        '@sketchpad_drawing',
+        key,
         JSON.stringify({ fileName, timeStamp, paths: serializedPaths })
       );
       set({ timeStamp });
+      set((state) => ({ refreshTrigger: state.refreshTrigger + 1 }));
     } catch (e) {
       console.error('Failed to save drawing.', e);
     }
@@ -110,6 +113,19 @@ const useSketchPadStore = create<StoreType>((set, get) => ({
       }
     } catch (e) {
       console.error('Failed to load drawing.', e);
+    }
+  },
+  getAllSavedDrawings: async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const drawingKeys = keys.filter((key) => key.startsWith('@sketchpad_drawing_'));
+      const drawings = await AsyncStorage.multiGet(drawingKeys);
+      return drawings
+        .map(([key, value]) => (value ? JSON.parse(value) : null))
+        .filter((drawing) => drawing !== null);
+    } catch (e) {
+      console.error('Failed to load drawings', e);
+      return [];
     }
   },
 }));
