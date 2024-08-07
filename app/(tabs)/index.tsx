@@ -11,10 +11,10 @@ import UndoRedo from '~/modules/canvas/undo-redo';
 import { theme } from '~/theme';
 
 export default function Home() {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const handleModalOpenChange = (open: boolean) => {
+    setIsModalOpen(open);
   };
   return (
     <>
@@ -23,12 +23,12 @@ export default function Home() {
         style={{ flex: 1, paddingHorizontal: 18, backgroundColor: theme.colors.light }}>
         <View style={styles.container}>
           <SketchCanvas containerStyle={{ flex: 1 }} />
-          <SaveErase handleSave={toggleModal} />
+          <SaveErase handleSave={handleModalOpenChange} />
           <UndoRedo />
           <ColorPicker />
           <StrokePicker />
         </View>
-        <SaveDrawingModal isVisible={isModalVisible} onClose={toggleModal} />
+        <SaveDrawingModal isOpen={isModalOpen} onOpenChange={handleModalOpenChange} />
       </SafeAreaView>
     </>
   );

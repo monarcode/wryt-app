@@ -35,7 +35,6 @@ const SavedSketches = () => {
       <Text>{new Date(item.timeStamp).toLocaleDateString()}</Text>
     </View>
   );
-  console.log('saved sss', sketches);
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <View style={styles.header}>

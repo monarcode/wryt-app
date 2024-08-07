@@ -6,13 +6,13 @@ import { View } from '~/components/shared';
 import { theme } from '~/theme';
 
 interface Props {
-  handleSave: () => void;
+  handleSave: (open: boolean) => void;
 }
 
 const SaveErase = ({ handleSave }: Props) => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.action} onPress={handleSave}>
+      <Pressable style={styles.action} onPress={() => handleSave(true)}>
         <SaveIcon />
       </Pressable>
       <Pressable style={styles.action}>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Modal from 'react-native-modal';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import * as Dialog from '@rn-primitives/dialog';
 import useSketchPadStore from '~/store/store';
 import { theme } from '~/theme';
 
 interface Props {
-  isVisible: boolean;
-  onClose: () => void;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-const SaveDrawingModal = ({ isVisible, onClose }: Props) => {
+const SaveDrawingModal = ({ isOpen, onOpenChange }: Props) => {
   const [canvasName, setCanvasName] = useState('');
   const setFileName = useSketchPadStore((state) => state.setFileName);
   const saveDrawing = useSketchPadStore((state) => state.saveDrawing);
@@ -17,30 +17,53 @@ const SaveDrawingModal = ({ isVisible, onClose }: Props) => {
   const handleSave = async () => {
     setFileName(canvasName);
     await saveDrawing();
-    onClose();
+    onOpenChange(false);
     setCanvasName('');
   };
 
   return (
-    <Modal isVisible={isVisible} onBackdropPress={onClose}>
-      <View style={styles.modalContainer}>
-        <Text style={styles.title}>Save Drawing</Text>
-        <Text style={styles.subtitle}>Enter a name for this canvas</Text>
-        <TextInput style={styles.input} value={canvasName} onChangeText={setCanvasName} />
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>Save and Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
+    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay style={styles.overlay} />
+        <Dialog.Content style={styles.modalContainer}>
+          <Dialog.Title style={styles.title}>Save Drawing</Dialog.Title>
+          <Dialog.Description style={styles.subtitle}>
+            Enter a name for this canvas
+          </Dialog.Description>
+          <TextInput style={styles.input} value={canvasName} onChangeText={setCanvasName} />
+          <TouchableOpacity
+            style={[styles.button, canvasName === '' && styles.buttonDisabled]}
+            onPress={handleSave}
+            disabled={!canvasName}>
+            <Text style={styles.buttonText}>Save and Continue</Text>
+          </TouchableOpacity>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 
+const { width: screenWidth } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
   modalContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -(0.435 * screenWidth) }, { translateY: -100 }],
+    width: '87%',
   },
   title: {
     fontSize: 20,
@@ -68,6 +91,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 50,
     alignItems: 'center',
+    height: 48,
+    justifyContent: 'center',
+  },
+  buttonDisabled: {
+    backgroundColor: '#D3D3D3',
   },
   buttonText: {
     color: 'white',
