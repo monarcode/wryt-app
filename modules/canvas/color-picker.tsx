@@ -1,19 +1,41 @@
+import React, { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
 import ColorPickerIcon from '~/assets/icons/color-picker.svg';
+import CustomModal from '~/components/CustomModal';
 import { View } from '~/components/shared';
 import { theme } from '~/theme';
 
-const ColorPicker = () => {
+const ColorPicker: React.FC = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [recentlyUsedColors, setRecentlyUsedColors] = useState<string[]>([]);
+  const [currentColor, setCurrentColor] = useState<string>('#000');
+
+  const handleColorSelect = (color: string) => {
+    setCurrentColor(color);
+    setRecentlyUsedColors((prevColors) => {
+      const newColors = [color, ...prevColors.filter((c) => c !== color)].slice(0, 3);
+      return newColors;
+    });
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.colorWrapper}>
-        <View style={[styles.activeColor]} />
+        <View style={[styles.activeColor, { backgroundColor: currentColor }]} />
       </View>
 
-      <Pressable style={styles.action}>
+      <Pressable onPress={() => setModalVisible(true)} style={styles.action}>
         <ColorPickerIcon />
       </Pressable>
+
+      <CustomModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        recentlyUsedColors={recentlyUsedColors}
+        onColorSelect={handleColorSelect}
+      />
     </View>
   );
 };
