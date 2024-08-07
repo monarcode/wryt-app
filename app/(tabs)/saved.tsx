@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontFamily: theme.fontFamily.semiBold,
-    marginTop: 20
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
+    marginTop: 20
   },
   sort: {
     backgroundColor: '#fff',
