@@ -23,8 +23,10 @@ const useSketchPadStore = create<StoreType>((set, get) => ({
     const { color, strokeWidth, strokeStyle } = get();
     const newPath = Skia.Path.Make();
     newPath.moveTo(x, y);
+    newPath.lineTo(x, y);
+    const currentPath = { path: newPath, color, strokeWidth, strokeStyle }
     set({
-      currentPath: { path: newPath, color, strokeWidth, strokeStyle },
+      currentPath,
     });
   },
 

@@ -9,12 +9,18 @@ import StrokeTwo from '~/assets/icons/strokes/2.svg';
 import StrokeThree from '~/assets/icons/strokes/3.svg';
 import StrokeFour from '~/assets/icons/strokes/4.svg';
 import { View } from '~/components/shared';
+import useSketchPadStore from '~/store/store';
 import { theme } from '~/theme';
 
 const StrokePicker = () => {
   // can use this programmatically to open/close the popover
   const popOverRef = useRef<PopoverPrimitive.PopoverTriggerRef>(null);
-
+  const { setStrokeWidth, strokeWidth } = useSketchPadStore((store) => store);
+  const strokes = [StrokeFour, StrokeThree, StrokeTwo, StrokeOne];
+  const handleBrushSize = (size: number) => {
+    setStrokeWidth(size);
+    // popOverRef.current && popOverRef.current?.close();
+  };
   return (
     <View style={styles.container}>
       <PopoverPrimitive.Root ref={popOverRef}>
@@ -29,21 +35,18 @@ const StrokePicker = () => {
               entering={FadeInDown.duration(200)}
               exiting={FadeOutDown.duration(200)}
               style={styles.popover}>
-              <Pressable style={styles.stroke}>
-                <StrokeFour />
-              </Pressable>
-
-              <Pressable style={styles.stroke}>
-                <StrokeThree />
-              </Pressable>
-
-              <Pressable style={styles.stroke}>
-                <StrokeTwo />
-              </Pressable>
-
-              <Pressable style={styles.stroke}>
-                <StrokeOne />
-              </Pressable>
+              {strokes.map((StrokeIcon, index) => {
+                const size = strokes.length - 1 - index + 1 || 1;
+                const isActive = strokeWidth === size
+                return (
+                  <Pressable
+                    key={index}
+                    onPress={() => handleBrushSize(size)}
+                    style={[styles.stroke, isActive && styles.active]}>
+                    <StrokeIcon />
+                  </Pressable>
+                );
+              })}
             </Animated.View>
           </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>
@@ -67,6 +70,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     flexDirection: 'row',
   },
+  active:{
+    backgroundColor:"#ddd"
+  },
   popover: {
     backgroundColor: theme.colors.light,
     width: 60,
@@ -77,6 +83,8 @@ const styles = StyleSheet.create({
   },
   stroke: {
     transform: [{ scale: 0.8 }],
+    padding:10,
+    borderRadius:100
   },
 });
 

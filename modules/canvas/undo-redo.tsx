@@ -1,19 +1,21 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import RedoIcon from '~/assets/icons/redo-icon.svg';
 import UndoIcon from '~/assets/icons/undo-icon.svg';
 import { View } from '~/components/shared';
+import useSketchPadStore from '~/store/store';
 import { theme } from '~/theme';
 
 const UndoRedo = () => {
+  const { undo, redo, redoStack } = useSketchPadStore((store) => store);
   return (
     <View style={styles.container}>
-      <Pressable style={styles.action}>
+      <TouchableOpacity onPress={undo} style={styles.action}>
         <UndoIcon />
-      </Pressable>
-      <Pressable style={styles.action}>
+      </TouchableOpacity>
+      <TouchableOpacity disabled={redoStack.length === 0} onPress={redo} style={styles.action}>
         <RedoIcon />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
