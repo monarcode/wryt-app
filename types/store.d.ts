@@ -6,6 +6,7 @@ export type PathType = {
 };
 
 export type StoreType = {
+  getAllSavedDrawings: any;
   paths: PathType[];
   redoStack: PathType[];
   color: string;
@@ -14,6 +15,7 @@ export type StoreType = {
   currentPath: PathType | null;
   fileName: string;
   timeStamp: string;
+  refreshTrigger: number;
 
   setColor: (color: string) => void;
   setStrokeWidth: (strokeWidth: number) => void;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
+import useSketchPadStore from '~/store/store';
 import { theme } from '~/theme';
 
 interface Props {
@@ -10,11 +11,14 @@ interface Props {
 
 const SaveDrawingModal = ({ isVisible, onClose }: Props) => {
   const [canvasName, setCanvasName] = useState('');
+  const setFileName = useSketchPadStore((state) => state.setFileName);
+  const saveDrawing = useSketchPadStore((state) => state.saveDrawing);
 
-  const handleSave = () => {
-    // Handle save action
-    console.log('Canvas Name:', canvasName);
+  const handleSave = async () => {
+    setFileName(canvasName);
+    await saveDrawing();
     onClose();
+    setCanvasName('');
   };
 
   return (
